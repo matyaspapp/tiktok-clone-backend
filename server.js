@@ -9,6 +9,11 @@ const port = 9000;
 
 // middlewares
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', '*');
+  next();
+});
 
 // db config
 const connectionUrl =
@@ -32,6 +37,20 @@ app.get('/v1/posts', (req, res) =>
     .status(200)
     .send(Data)
 );
+
+app.get('/v2/posts', (req, res) => {
+  Videos.find((err, data) => {
+    if (err) {
+      res
+        .status(500)
+        .send(err);
+    } else {
+      res
+        .status(200)
+        .send(data);
+    }
+  });
+});
 
 app.post('/v2/posts', (req, res) => {
   const dbVideos = req.body;
